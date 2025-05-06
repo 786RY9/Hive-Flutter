@@ -50,6 +50,12 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
+            child: Image.asset('assets/image.jpg'),
+          ),
+          const SizedBox(height: 4,),
+
+          Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Card(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
