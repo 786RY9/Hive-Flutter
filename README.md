@@ -19,7 +19,7 @@ A simple Flutter project demonstrating local storage with Hive – a lightweight
 <img src="assets/screenshot.png" width="300" alt="App Screenshot" />
 
 ### 🎞️ Demo
-<img src="assets/demo.gif" width="300" alt="App Demo" />
+<img src="assets/Hive_demo.gif" width="300" alt="App Demo" />
 
 ---
 
