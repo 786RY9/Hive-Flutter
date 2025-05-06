@@ -1,16 +1,41 @@
-# hive_learn
+# Hive-Flutter
 
-A new Flutter project.
+A simple Flutter project demonstrating local storage with Hive – a lightweight and blazing fast key-value database written in pure Dart.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 📱 Features
 
-A few resources to get you started if this is your first Flutter project:
+- Add new entries (name & age)
+- View all stored entries
+- Delete single entries or all entries
+- Reactive UI using `ValueListenableBuilder`
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🖼️ Screenshots & Demo
+
+### 📷 Screenshot
+<img src="assets/screenshot.png" width="300" alt="App Screenshot" />
+
+### 🎞️ Demo
+<img src="assets/demo.gif" width="300" alt="App Demo" />
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Flutter SDK
+- Dart SDK
+- Any Flutter-supported IDE (VS Code, Android Studio, etc.)
+
+### Installation
+
+```bash
+git clone https://github.com/786RY9/Hive-Flutter.git
+cd Hive-Flutter
+flutter pub get
+flutter packages pub run build_runner build
+flutter run
