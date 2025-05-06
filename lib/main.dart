@@ -6,34 +6,32 @@ import 'package:hive_learn/person.dart';
 void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(PersonAdapter());
-  boxPersons = await Hive.openBox<Person>('personBox');
+  Box<Person> boxPersons = await Hive.openBox<Person>('personBox');
 
-  runApp(const MyApp());
+  runApp(MyApp(boxPersons: boxPersons));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Box<Person> boxPersons;
 
-  // This widget is the root of your application.
+  const MyApp({super.key, required this.boxPersons});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-
       title: 'Hive',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: MyHomePage(title: 'Flutter Demo Home Page', boxPersons: boxPersons),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
   final String title;
+  final Box<Person> boxPersons;
+
+  const MyHomePage({super.key, required this.title, required this.boxPersons});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -75,10 +73,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     const SizedBox(height: 10),
                     TextButton(
-                      onPressed: // put data when press on this button
-                          () {
+                      onPressed: () {
                         setState(() {
-                          boxPersons.put(
+                          widget.boxPersons.put(
                             'key_${nameController.text}',
                             Person(
                               age: int.parse(ageController.text),
@@ -94,32 +91,39 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-
           Expanded(
             child: Padding(
               padding: EdgeInsets.all(5),
               child: Card(
                 child: Padding(
                   padding: const EdgeInsets.all(10),
-
-                  child: ListView.builder(
-                    itemCount: boxPersons.keys.length,
-                    itemBuilder: (context, index) {
-                      final key = boxPersons.keys.elementAt(index);
-                      Person person = boxPersons.get(key);
-                      return ListTile(
-                        leading: IconButton(
-                          onPressed: () {
-                            // deleteat
-                            setState(() {
-                              boxPersons.deleteAt(index);
-                            });
-                          },
-                          icon: const Icon(Icons.remove),
-                        ),
-                        title: Text(person.name),
-                        subtitle: const Text('Name'),
-                        trailing: Text('age: ${person.age.toString()}'),
+                  child: ValueListenableBuilder<Box<Person>>(
+                    valueListenable: widget.boxPersons.listenable(),
+                    builder: (
+                      BuildContext context,
+                      Box<Person> box,
+                      Widget? child,
+                    ) {
+                      return ListView.builder(
+                        itemCount: box.keys.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final person = box.getAt(index);
+                          return ListTile(
+                            leading: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  box.deleteAt(index);
+                                });
+                              },
+                              icon: const Icon(Icons.remove),
+                            ),
+                            title: Text(person?.name ?? 'Unknown'),
+                            subtitle: const Text('Name'),
+                            trailing: Text(
+                              'age: ${person?.age.toString() ?? 'N/A'}',
+                            ),
+                          );
+                        },
                       );
                     },
                   ),
@@ -130,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
           TextButton.icon(
             onPressed: () {
               setState(() {
-                boxPersons.clear();
+                widget.boxPersons.clear();
               });
             },
             icon: const Icon(Icons.delete_outline),
